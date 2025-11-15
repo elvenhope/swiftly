@@ -49,11 +49,12 @@ export default function SignUpPage() {
                     email: data.email,
                     password: data.password,
                     name: data.name,
+					role: "customer",
                     callbackURL: "/", // fallback, redirect handled below
                 },
                 {
                     onRequest: () => {},
-                    onSuccess: () => {},
+                    onSuccess: () => { router.push("/") },
                     onError: (ctx) => alert(ctx.error.message),
                 }
             )

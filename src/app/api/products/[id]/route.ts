@@ -6,7 +6,8 @@ interface Params {
 	id: string;
 }
 
-export async function GET(request: NextRequest, { params }: { params: Params }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function GET(request: NextRequest, { params }: { params: any }) {
 	const { id } = await params;
 
 	try {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { signUp } from "@/lib/auth-client";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,10 +10,11 @@ export async function POST(req: NextRequest) {
     }
 
     // Use the emailAndPassword provider
-    const user = await auth.emailAndPassword.signUp({
+    const user = await signUp.email({
       email,
       password,
-      name, // optional metadata
+      name,
+	  role: "customer"
     });
 
     return NextResponse.json({ user }, { status: 201 });
