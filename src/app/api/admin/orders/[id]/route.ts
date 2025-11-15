@@ -28,7 +28,8 @@ export async function GET(req: NextRequest, { params }: any) {
 
 
 // PUT handler for updating order status
-export async function PUT(req: NextRequest, { params }: Params) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function PUT(req: NextRequest, { params }: any) {
 	const { id } = await params
 	try {
 		const body = await req.json()
@@ -46,6 +47,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
 		})
 
 		return NextResponse.json(updated, { status: 200 })
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (err: any) {
 		console.error(err)
 		return NextResponse.json({ message: err.message || "Failed to update order" }, { status: 500 })
