@@ -17,6 +17,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  orders        Order[]      // ← back-relation
 
   role String?
 
@@ -67,4 +68,57 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Product {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  image       String?   // URL or path to the product image
+  stock       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  orderItems  OrderItem[]   // ← back-relation
+
+  @@map("product")
+}
+
+model Order {
+  id          String       @id @default(uuid())
+  userId      String?
+  user        User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items       OrderItem[]
+  total       Decimal      @db.Decimal(10,2)
+  status      OrderStatus  @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("order")
+}
+
+model OrderItem {
+  id          String    @id @default(uuid())
+  orderId     String
+  order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id])
+
+  name        String
+  price       Decimal   @db.Decimal(10,2)
+  quantity    Int
+  image       String?
+
+  @@map("order_item")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PAYMENT_PENDING
+  PAYMENT_RECEIVED
+  DELIVERED
+  CANCELED
 }

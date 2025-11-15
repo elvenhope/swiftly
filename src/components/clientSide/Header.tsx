@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import Image from "next/image"
-import { IoPersonCircleOutline } from "react-icons/io5"
+import { IoCartOutline, IoPersonCircleOutline } from "react-icons/io5"
 import logo from "@/../assets/images/logo.svg"
 import { useSession, signOut } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
@@ -11,19 +11,21 @@ function Header() {
     const { data } = useSession()
     const router = useRouter()
     const [menuOpen, setMenuOpen] = useState(false)
-	const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout>();
+    const [closeTimeout, setCloseTimeout] = useState<NodeJS.Timeout>()
 
     const handleMouseEnter = () => {
-		clearTimeout(closeTimeout)
+        clearTimeout(closeTimeout)
         if (data?.user) {
             setMenuOpen(true) // toggle dropdown
         }
     }
 
-	const handleMouseLeave = () => {
-		setCloseTimeout(setTimeout(() => {
-			setMenuOpen(false)
-		}, 400));
+    const handleMouseLeave = () => {
+        setCloseTimeout(
+            setTimeout(() => {
+                setMenuOpen(false)
+            }, 400)
+        )
     }
 
     const handleLogout = async () => {
@@ -41,34 +43,45 @@ function Header() {
             >
                 <Image src={logo} alt="Swiftly Logo" fill />
             </div>
-            <div
-                className="relative inline-block"
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
-                <IoPersonCircleOutline
-                    size={50}
-                    className="cursor-pointer text-sunglow"
-                    onClick={() => router.push("/profile-dashboard")}
-                />
+            <div className="flex gap-3">
+                <div className="">
+                    <IoCartOutline
+                        size={50}
+                        className="cursor-pointer text-sunglow"
+                        onClick={() => router.push("/cart")}
+                    />
+                </div>
+                <div
+                    className="relative inline-block"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <IoPersonCircleOutline
+                        size={50}
+                        className="cursor-pointer text-sunglow"
+                        onClick={() => router.push("/dashboard")}
+                    />
 
-                {menuOpen && data?.user && (
-                    <div className="absolute right-0 mt-1 w-48 bg-dark-purple border border-gray-700 rounded-md shadow-lg z-50">
-                        <button
-                            className="block w-full text-left px-4 py-2 hover:bg-english-violet"
-                            onClick={() => router.push("/profile-dashboard")}
-                        >
-                            Dashboard
-                        </button>
+                    {menuOpen && data?.user && (
+                        <div className="absolute right-0 mt-1 w-48 bg-dark-purple border border-gray-700 rounded-md shadow-lg z-50">
+                            <button
+                                className="block w-full text-left px-4 py-2 hover:bg-english-violet"
+                                onClick={() =>
+                                    router.push("/dashboard")
+                                }
+                            >
+                                Dashboard
+                            </button>
 
-                        <button
-                            className="block w-full text-left px-4 py-2 hover:bg-english-violet"
-                            onClick={handleLogout}
-                        >
-                            Logout
-                        </button>
-                    </div>
-                )}
+                            <button
+                                className="block w-full text-left px-4 py-2 hover:bg-english-violet"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )
