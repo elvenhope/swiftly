@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import Image from "next/image"
-import { IoCartOutline, IoPersonCircleOutline } from "react-icons/io5"
+import { IoCartOutline, IoPencilOutline, IoPersonCircleOutline } from "react-icons/io5"
 import logo from "@/../assets/images/logo.svg"
 import { useSession, signOut } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
@@ -44,6 +44,9 @@ function Header() {
                 <Image src={logo} alt="Swiftly Logo" fill />
             </div>
             <div className="flex gap-3">
+				<div>
+					<IoPencilOutline size={50} className="cursor-pointer text-sunglow" onClick={() => router.push("/signup")} />
+				</div>
                 <div className="">
                     <IoCartOutline
                         size={50}

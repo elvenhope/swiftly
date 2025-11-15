@@ -36,6 +36,31 @@ export default function HomePage() {
         product.name.toLowerCase().includes(search.toLowerCase())
     )
 
+	const addToCart = (product: Product) => {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]")
+
+        const existing = cart.find((item: Product) => item.id === product.id)
+
+        if (existing) {
+            existing.quantity = Math.min(
+                (existing.quantity || 1) + 1,
+                product.stock
+            )
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                quantity: 1,
+                stock: product.stock,
+            })
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart))
+    }
+
+
     return (
         <div className="min-h-screen p-6 bg-(--color-background)">
             <div className="max-w-5xl mx-auto">
@@ -62,8 +87,10 @@ export default function HomePage() {
                         <div
                             key={product.id}
                             className="bg-dark-purple p-4 rounded-xl shadow-md flex flex-col items-center cursor-pointer hover:shadow-lg transition-shadow"
-							onClick={() => router.push(`/products/${product.id}`)}
-						>
+                            onClick={() =>
+                                router.push(`/products/${product.id}`)
+                            }
+                        >
                             <div className="w-full h-48 relative mb-4">
                                 <Image
                                     src={product.image || placeholderImage}
@@ -86,7 +113,13 @@ export default function HomePage() {
                             </p>
 
                             {userSignedIn && product.stock > 0 && (
-                                <button className="bg-english-violet text-sunglow px-4 py-2 rounded-md font-semibold hover:bg-dark-purple transition-colors">
+                                <button
+                                    className="bg-english-violet text-sunglow px-4 py-2 rounded-md font-semibold hover:bg-dark-purple transition-colors"
+                                    onClick={(e) => {
+                                        e.stopPropagation() // prevents triggering the product page navigation
+                                        addToCart(product)
+                                    }}
+                                >
                                     Add to Cart
                                 </button>
                             )}

@@ -81,7 +81,7 @@ export default function CartPage() {
 
         setLoading(true)
         try {
-            const res = await fetch("/api/orders", {
+            const res = await fetch("/api/admin/orders", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

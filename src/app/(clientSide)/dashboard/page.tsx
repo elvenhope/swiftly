@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useSession } from "@/lib/auth-client"
 import Image from "next/image"
 import placeholderImage from "../../../../assets/images/noImage.jpg"
+import { useRouter } from "next/navigation"
 
 type OrderItem = {
     id: string
@@ -25,6 +26,7 @@ export default function ClientOrdersPage() {
     const { data: session } = useSession()
     const [orders, setOrders] = useState<Order[]>([])
     const [fetching, setFetching] = useState(false)
+	const router = useRouter()
 
     useEffect(() => {
         if (!session?.user) return
@@ -66,7 +68,8 @@ export default function ClientOrdersPage() {
                 {orders.map((order) => (
                     <div
                         key={order.id}
-                        className="bg-dark-purple p-4 rounded-xl shadow-md"
+                        className="bg-dark-purple p-4 rounded-xl shadow-md cursor-pointer hover:bg-raisin-black transition"
+                        onClick={() => router.push(`/dashboard/${order.id}`)}
                     >
                         <div className="flex justify-between items-center">
                             <div>
