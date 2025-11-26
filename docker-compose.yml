@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: swiftly_app
+    restart: always
+    env_file:
+      - .env       # Your cloud DB credentials go here
+    ports:
+      - "3000:3000"   # Access app at localhost:3000
